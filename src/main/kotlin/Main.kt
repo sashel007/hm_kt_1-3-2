@@ -46,7 +46,7 @@ fun calculateCommission(selectedCard: Int, totalSum: Double, inputAmount: Double
     when (selectedCard) {
         1 -> {
             if (inputAmount < MAX_SUM_DAY && (totalSum + inputAmount) < MAX_SUM_MONTH) {
-                if (inputAmount < MAX_SUM_ONETIME) {
+                if (inputAmount + totalSum < MAX_SUM_ONETIME) {
                     commission = 0.0
                     println("Комиссия составляет: ${commission.toInt()}")
                 }
@@ -57,7 +57,7 @@ fun calculateCommission(selectedCard: Int, totalSum: Double, inputAmount: Double
 
         2 -> {
             if (inputAmount < MAX_SUM_DAY && (totalSum + inputAmount) < MAX_SUM_MONTH) {
-                if (inputAmount < MAX_SUM_ONETIME) {
+                if (inputAmount + totalSum < MAX_SUM_ONETIME) {
                     commission = 0.0
                     println("Комиссия составляет: ${commission.toInt()}")
                 }
