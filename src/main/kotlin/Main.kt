@@ -1,7 +1,6 @@
 import java.util.*
 
 fun main() {
-    val scanner = Scanner(System.`in`)
 
     println("Какой картой вы пользуетесь? Введите номер:")
     println("1. Maestro")
@@ -10,40 +9,47 @@ fun main() {
     println("4. МИР")
     println("5. VK Pay")
 
-    var selectedCard = scanner.nextInt()
+    var selectedCard = readln().toInt()
     if ((selectedCard < 1) && (selectedCard > 5)) {
         print("Введите номер корректно: ")
-        selectedCard = scanner.nextInt()
+        selectedCard = readln().toInt()
     }
 
-    println("Введите предыдущих переводов в этом месяце:")
-    val totalSum = scanner.nextDouble()
+    println("Введите сумму предыдущих переводов в этом месяце:")
+    val totalSum = readln().toDouble()
     if (totalSum <= 0.0) {
         print("Введите корректную сумму:")
-        scanner.nextDouble()
+        var totalSum = readln().toDouble()
     }
 
 
     println("Введите сумму совершаемого перевода: ")
-    val inputAmount = scanner.nextDouble()
+
+    val inputAmount = readln().toDouble()
     if (inputAmount <= 0.0) {
         print("Введите корректную сумму:")
-        scanner.nextDouble()
+        val inputAmount = readln().toDouble()
     }
 
     calculateCommission(selectedCard,totalSum,inputAmount)
 }
 
 fun calculateCommission(selectedCard: Int, totalSum: Double, inputAmount: Double) {
-    val MAX_SUM_DAY = 150000.0
-    val MAX_SUM_MONTH = 600000.0
+
+    val MAX_SUM_ONETIME = 75_000.0
+    val MAX_SUM_DAY = 150_000.0
+    val MAX_SUM_MONTH = 600_000.0
+    val VK_ONETIME_LIMIT = 15_000.0
+    val VK_MONTH_LIMIT = 40_000.0
     var commission = 0.0
 
     when (selectedCard) {
         1 -> {
             if (inputAmount < MAX_SUM_DAY && (totalSum + inputAmount) < MAX_SUM_MONTH) {
-                commission = 0.0
-                println("Комиссия составляет: ${commission.toInt()}")
+                if (inputAmount < MAX_SUM_ONETIME) {
+                    commission = 0.0
+                    println("Комиссия составляет: ${commission.toInt()}")
+                }
             } else {
                 println("Лимит превышен")
             }
@@ -51,8 +57,10 @@ fun calculateCommission(selectedCard: Int, totalSum: Double, inputAmount: Double
 
         2 -> {
             if (inputAmount < MAX_SUM_DAY && (totalSum + inputAmount) < MAX_SUM_MONTH) {
-                commission = 0.0
-                println("Комиссия составляет: ${commission.toInt()}")
+                if (inputAmount < MAX_SUM_ONETIME) {
+                    commission = 0.0
+                    println("Комиссия составляет: ${commission.toInt()}")
+                }
             } else {
                 println("Лимит превышен")
             }
@@ -79,6 +87,12 @@ fun calculateCommission(selectedCard: Int, totalSum: Double, inputAmount: Double
             }
         }
 
-        5 -> println("Комиссия отсутствует")
+        5 -> {
+            if (inputAmount < VK_ONETIME_LIMIT && (inputAmount + totalSum) < VK_MONTH_LIMIT) {
+                println("Комиссия составялет 0 рублей")
+            } else {
+                println("Лимит превышен")
+            }
+        }
     }
 }
